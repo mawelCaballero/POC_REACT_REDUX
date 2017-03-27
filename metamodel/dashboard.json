@@ -1,0 +1,101 @@
+{
+    "metamodel": {
+        "name":"Dashboard Quote List",
+        "pagination":true,
+        "searching": true,
+        "summary": true,
+        "sections": [
+        {
+          "title":"Search quote list form",
+          "properties":[
+            {
+              "id": "quote-number",
+              "type": "text",
+              "label": "_QUOTE_NUMBER",
+              "uiInput": true,
+              "class":"box box-rds-color box-marginTB everestFieldBox",
+              "action": {
+                "actionType": "search",
+                "resource": "quotes",
+                "criteria_id":"quote-identifier"
+              }
+
+            },
+
+            {
+              "id": "quote-list",
+              "label": "_QUOTE_LIST",
+              "class":"box box-rds-color box-marginTB everestFieldBox",
+              "type": "table",
+              "columns": [
+                  {
+                      "id": "quote-product-id",
+                      "label_header": "_PRODUCT_TYPE",
+                      "type": "icon",
+                      "width": "5%"
+                  },
+                  {
+                      "id": "quote-identifier",
+                      "label_header": "_NUMBER",
+                      "type": "label",
+                      "align": "left",
+                      "width": "10%"
+                  },
+                  {
+                      "id": "quote-owner-name",
+                      "label_header": "_NAME",
+                      "type": "label",
+                      "align": "left",
+                      "width": "10%"
+                  },
+                  {
+                      "id": "quote-start-date",
+                      "label_header": "_Effective_Date",
+                      "type": "label",
+                      "format": "dd/MM/yyyy",
+                      "align": "left",
+                      "width": "10%"
+                  },
+                  {
+                      "id": "quote-distributor-id",
+                      "label_header": "_DISTRIBUTOR_ID",
+                      "type": "label",
+                      "align": "left",
+                      "width": "10%"
+                  },
+                  {
+                      "id": "quote_risk:display-id",
+                      "label_header": "_RISK_DATA",
+                      "type": "label",
+                      "align": "left",
+                      "width": "15%"
+                  },
+                  {
+                      "id":"actions",
+                      "type": "actions",
+                      "align": "left",
+                      "width": "10%",
+                      "options": [
+                          {
+                              "value": "edit",
+                              "icon": "fa flaticon-edit",
+                              "title": "_EDIT",
+                              "method": "dashboardToQuote"
+                          },
+                          {
+                              "value": "remove",
+                              "icon": "fa fa-trash-o",
+                              "title": "_DELETE",
+                              "method": "deleteQuote"
+                          }
+                      ]
+                  }
+              ]
+
+              }
+          ]
+
+
+        }]
+    }
+}

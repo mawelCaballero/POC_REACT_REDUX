@@ -1,0 +1,51 @@
+{
+    "metamodel": {
+        "name": "Quote",
+        "sections": [
+
+            {
+                "title": "About the Client",
+                "class":"text-center",
+                "underline": false,
+                "properties": [
+                    {
+                        "id": "quote-distributor-id",
+                        "type": "text",
+                        "label": "_QUOTE_DISTRIBUTOR_ID",
+                        "classInput":"mag-Top15px",
+                        "class":"box box-rds-color box-marginTB everestFieldBox",
+                        "patchOnBlur": true
+
+                    },
+                    {
+                        "id": "quote-identifier",
+                        "type": "text",
+                        "label": "_QUOTE_IDENTIFIER",
+                        "classInput":"ausMap",
+                        "class":"box box-rds-color box-marginTB everestFieldBox",
+                        "patchOnBlur": true
+                    },
+                    {
+                        "id": "quote-insured-name",
+                        "type": "text",
+                        "label": "_INSURED_NAME",
+                        "placeholder": "Enter insured name",
+                        "classInput":"mag-Top15px",
+                        "class":"box box-rds-color box-marginTB everestFieldBox everestImageFieldBox occupation",
+                        "patchOnBlur": true
+                    }
+                ]
+            }
+        ],
+        "businessObject": {
+            "quote": [
+                "quote:quote_owner_list",
+                "quote:insureds"
+            ],
+
+            "insured": [
+                "insured:coverages"
+            ]
+        }
+    }
+}
