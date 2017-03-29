@@ -19,6 +19,7 @@ The default username is `kkdrensk` and the default password is `kkdrensk`, but f
 4. [Stats, facts and enhancements](#stats_and_facts)
 5. [Stats and Facts](#stats_and_facts)
 6. [POC Experience](#poc_experience)
+7. [Configuration Management] (#configuration_management)
 
 -----
 ## Purpose of this document <a name="purpose-of-this-document"></a>
@@ -534,3 +535,393 @@ Practically speaking, React can diff two DOM trees and discover the minimum set 
 Virtual DOM rendering and diffing is the only magical part about React. Its excellent performance, however, is what fundamentally enables us to have a much simpler architecture overall. How simple?
 React components are idempotent functions. They describe your UI at any point in time, just like a server-rendered app.
 — Pete Hunt, React: Rethinking best practices
+
+## Configuration Management <a name="configuration_management"></a>
+
+webpack is a module bundler for modern JavaScript applications. It is incredibly configurable.
+
+there are Four Core Concepts that describes to webpack:
+
+- Entry: webpack creates a graph of all of your application's dependencies. The starting point of this graph is known as an entry point. The entry point tells webpack where to start and follows the graph of dependencies to know what to bundle. You can think of your application's entry point as the contextual root or the first file to kick off your app.
+- Output: Once you have bundled all of your assets together, you still need to tell webpack where to bundle your application. The webpack output property tells webpack how to treat bundled code.
+
+**webpack.config.js**
+
+  ````javascript
+
+    const path = require('path');
+
+    module.exports = {
+      entry: './path/to/my/entry/file.js',
+      output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'my-first-webpack.bundle.js'
+      }
+    };
+  ````
+
+- Loaders: The goal is to have all of the assets in your project to be webpack's concern and not the browser's. (This does not mean that they all have to be bundled together). webpack treats every file (.css, .html, .scss, .jpg, etc.) as a module. However, webpack only understands JavaScript. Loaders in webpack transform these files into modules as they are added to your dependency graph. At a high level, they have two purposes in your webpack config. Identify what files should be transformed by a certain loader. (test property) Transform that file so that it can be added to your dependency graph (and eventually your bundle). (use property)
+
+**webpack.config.js**
+
+  ````javascript
+    const path = require('path');
+    const config = {
+      entry: './path/to/my/entry/file.js',
+      output: {
+          path: path.resolve(__dirname, 'dist'),
+          filename: 'my-first-webpack.bundle.js'
+    },
+    module: {
+    rules: [
+      {test: /\.(js|jsx)$/, use: 'babel-loader'}
+    ]
+    }
+  };
+  module.exports = config;
+  ````
+
+- Plugins: Since Loaders only execute transforms on a per-file basis, plugins are most commonly used (but not limited to) performing actions and custom functionality on "compilations" or "chunks" of your bundled modules (and so much more). The webpack Plugin system is extremely powerful and customizable. In order to use a plugin, you just need to require() it and add it to the plugins array. Most plugins are customizable via options. Since you can use a plugin multiple times in a config for different purposes, you need to create an instance of it by calling it with new.
+
+**webpack.config.js**
+
+````javascript
+    const HtmlWebpackPlugin = require('html-webpack-plugin'); //installed via npm
+    const webpack = require('webpack'); //to access built-in plugins
+    const path = require('path');
+    const config = {
+      entry: './path/to/my/entry/file.js',
+      output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'my-first-webpack.bundle.js'
+      },
+      module: {
+        rules: [
+          {test: /\.(js|jsx)$/, use: 'babel-loader'}
+      ]
+    },
+      plugins: [
+        new webpack.optimize.UglifyJsPlugin(),
+        new HtmlWebpackPlugin({template: './src/index.html'})
+    ]
+  };
+  module.exports = config;
+````
+
+[Source Link] (https://facebook.github.io/react/blog/2016/07/11/introducing-reacts-error-code-system.html)
+
+### Packaging
+
+
+One of the most important problems that we have today with this type of applications is the fragmentation of the JS files and the load of these on the part of the Navigator. Webpack is a tool that can help us to package our code.
+
+In this POC, we have a complex folder structure but once it is processed by webpack, our
+ output will be packaged and transformed into a file called, in this case, **bundle.js**
+
+ <div style="text-align:center;padding-bottom:15px">
+   <img src="https://drive.google.com/uc?id=0B4Y8n9rDTStjUUpuZEpaaTB0TVE" width="80%">
+ </div>
+
+
+And the result will be an unique reference in the index.html
+
+````javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8"/>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script src="bundle.js"></script>
+</body>
+
+</html>
+
+````
+
+
+This transformation and Packaging into a file is done by webpack but even webpack can transform into different modules to js.
+
+#### modules
+
+In contrast to Node.js modules, webpack modules can express their dependencies in a variety of ways. A few examples are:
+
+- An ES2015 import statement
+- A CommonJS require() statement
+- An AMD define and require statement
+- An @import statement inside of a css/sass/less file.
+- An image url in a stylesheet (`url(...)`) or html (`<img src=...>`) file.
+
+webpack supports modules written in a variety of languages and preprocessors, via loaders. Loaders describe to webpack how to process non-JavaScript modules and include these dependencies into your bundles. The webpack community has built loaders for a wide variety of popular languages and language processors, including:
+
+- CoffeeScript
+- TypeScript
+- ESNext (Babel)
+- Sass
+- Less
+- Stylus
+And many others! Overall, webpack provides a powerful and rich API for customization that allows one to use webpack for any stack, while staying non-opinionated about your development, testing, and production workflows.
+
+For a full list, see the [list of loaders](https://webpack.js.org/loaders/) or [write your own](https://webpack.js.org/api/loaders/).
+
+### Dependencies
+
+All the dependencies are managed by npm on package.json.
+We can have a look to the contain of this file and diff about dev a prod dependencies:
+
+````javascript
+{
+  "name": "POC",
+  "version": "2.3.0",
+  "description": "Quick setup for new React.js applications featuring Redux, hot–reloading, PostCSS, react-router and Mocha.",
+  "dependencies": {
+    "axios": "^0.15.3",
+    "bcryptjs": "2.4.3",
+    "bootstrap": "^3.3.7",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "react-redux": "^4.4.1",
+    "react-router": "2.0.0-rc5",
+    "redux": "^3.0.4",
+    "redux-devtools-extension": "^2.13.0",
+    "redux-thunk": "^2.2.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.0.2",
+    "babel-core": "^6.5.1",
+    "babel-loader": "^6.2.2",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "css-loader": "^0.27.3",
+    "cssnano": "^3.0.1",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.10.1",
+    "foundation-sites": "^6.3.1",
+    "jquery": "^3.2.1",
+    "json-loader": "^0.5.2",
+    "node-sass": "^3.4.2",
+    "object.assign": "^4.0.1",
+    "react-transform-hmr": "^1.0.1",
+    "sass-loader": "^3.1.2",
+    "script-loader": "^0.6.1",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.6",
+    "webpack": "^1.12.13"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mawelCaballero/POC_REACT_REDUX.git"
+  },
+  "scripts": {
+    "start": "sudo node server.js",
+    "build": "webpack"
+  },
+  "author": "Mawel Caballero",
+  "license": "MIT"
+}
+
+````
+### Deployment
+
+Inside webpack.config.js we can set up different environments for different environments such as devvelopment and production.
+How can we do it?
+If we have the following scenario and the following files:
+
+- Developmenty environment **webpack.dev.config.js**
+````javascript
+module.exports = require("./makewebpackconfig")({
+  prod: false
+});
+````
+
+- Production environment **webpack.prod.config.js**
+````javascript
+module.exports = require("./makewebpackconfig")({
+  prod: true
+});
+````
+
+We might build different webpack configurations with the following command:
+* npm build
+And in the package.json file we can have the following configuration:
+
+````javascript
+"scripts": {
+    "start": "NODE_ENV=development node server.js",
+    "build": "NODE_ENV=production webpack --config webpack.prod.config.js --progress --colors -p"
+  },
+````
+
+the content of our **makewebpackconfig.js** can be variable depending on the target.
+
+````javascript
+
+module.exports = function(options) {
+  var entry, jsLoaders, plugins, cssLoaders, devtool;
+
+  // If production is true
+  if (options.prod) {
+  //
+  entry = [
+      path.resolve(__dirname, 'js/app.js') // Start with js/app.js...
+    ];
+    cssLoaders = ['file-loader?name=[path][name].[ext]', 'postcss-loader'];
+    // Plugins
+    plugins = [// Plugins for Webpack
+      new webpack.optimize.UglifyJsPlugin({ // Optimize the JavaScript...
+        compress: {
+          warnings: false // ...but do not show warnings in the console (there is a lot of them)
+        }
+      }),
+      new HtmlWebpackPlugin({
+        template: 'index.html', // Move the index.html file...
+        minify: { // Minifying it while it is parsed using the following, self–explanatory options
+          removeComments: true,
+          collapseWhitespace: true,
+          removeRedundantAttributes: true,
+          useShortDoctype: true,
+          removeEmptyAttributes: true,
+          removeStyleLinkTypeAttributes: true,
+          keepClosingSlash: true,
+          minifyJS: true,
+          minifyCSS: true,
+          minifyURLs: true
+        }
+      }),
+      new AppCachePlugin({
+        exclude: ['.htaccess']
+      })
+    ];
+
+  }
+  else{
+    devtool = 'cheap-eval-source-map';
+    // Entry
+    entry = [
+      "webpack-dev-server/client?http://localhost:3000", // Needed for hot reloading
+      "webpack/hot/only-dev-server", // See above
+      path.resolve(__dirname, 'js/app.js') // Start with js/app.js...
+    ];
+
+    cssLoaders = ['style-loader', 'css-loader', 'postcss-loader'];
+        // Only plugin is the hot module replacement plugin
+        plugins = [
+          new webpack.HotModuleReplacementPlugin(), // Make hot loading work
+          new AppCachePlugin()
+        ]
+  }
+      return {
+        devtool: devtool,
+        entry: entry,
+        output: { // Compile into js/build.js
+          path: path.resolve(__dirname, 'build'),
+          filename: "js/bundle.js"
+        },
+        module: {
+          loaders: [{
+              test: /\.js$/, // Transform all .js files required somewhere within an entry point...
+              loader: 'babel', // ...with the specified loaders...
+              exclude: path.join(__dirname, '/node_modules/') // ...except for the node_modules folder.
+            }, {
+              test:   /\.css$/, // Transform all .css files required somewhere within an entry point...
+              loaders: cssLoaders // ...with PostCSS
+            }, {
+              test: /\.jpe?g$|\.gif$|\.png$/i,
+              loader: "url-loader?limit=10000"
+            }
+          ]
+        },
+        plugins: plugins,
+        postcss: function() {
+          return [
+            require('postcss-import')({ // Import all the css files...
+              onImport: function (files) {
+                  files.forEach(this.addDependency); // ...and add dependecies from the main.css files to the other css files...
+              }.bind(this) // ...so they get hot–reloaded when something changes...
+            }),
+            require('postcss-simple-vars')(), // ...then replace the variables...
+            require('postcss-focus')(), // ...add a :focus to ever :hover...
+            require('autoprefixer')({ // ...and add vendor prefixes...
+              browsers: ['last 2 versions', 'IE > 8'] // ...supporting the last 2 major browser versions and IE 8 and up...
+            }),
+            require('postcss-reporter')({ // This plugin makes sure we get warnings in the console
+              clearMessages: true
+            })
+          ];
+        },
+        target: "web", // Make web variables accessible to webpack, e.g. window
+        stats: false, // Don't show stats in the console
+        progress: true
+      }
+    }
+
+````
+Deploying in dynamic environments,like AWS or Heroku we could have the following configuration in package.json :
+
+**Heroku**
+````javascript
+"heroku-postbuild": "webpack -p --config ./webpack.prod.config.js --progress"
+````
+
+With **AWS** Elastic Beanstalk, previosly its required an access key and install eb command or using webpack-s3-deployer. There are serveral options.
+
+it might be an example with webpack-s3-deployer:
+
+````javascript
+
+new WebpackDeployer({
+  environments: {
+    staging: {
+      region: 'us-west-2',
+      params: {
+        Bucket: 'staging.somebucket.com',
+        DistributionId: 'BUCKETIDHERE'
+      }
+    },
+    production: {
+      region: 'us-west-2',
+      params: {
+        Bucket: 'somebucket.com',
+        DistributionId: 'BUCKETIDHERE'
+      }
+    }
+  }
+  options: {
+    autoRun: true,
+    entryHtml: 'index.html',
+    invalidateEntry: true,
+    generateDeployFile: true,
+    versioning: {
+      timestamp: true,
+      gitHash: true,
+      custom: false
+    },
+    robots: {
+      generate: true,
+      items: [
+        {
+          userAgent: '<UserAgentHere>',
+          ignores: [ '<FileName or Directory Here>' ]
+        }
+      ]
+    },
+    slack: {
+      channels: ['#channel1', '#channel2'],
+      webhook: '<Webhook URL>',
+      appTitle: '<Application Title>',
+      appLink: '<Application URL>',
+      payload: {
+        username: '<BotName>',
+        icon_emoji: ':ghost:',
+        text: '<Slack Notification Text>'
+      }
+    }
+  }
+})
+````
+Or we can customize our deployment in a different dynamic enviroment.

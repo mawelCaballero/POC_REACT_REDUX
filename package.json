@@ -39,7 +39,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mxstbr/react-boilerplate.git"
+    "url": "git://github.com/mawelCaballero/POC_REACT_REDUX.git"
   },
   "scripts": {
     "start": "sudo node server.js",
