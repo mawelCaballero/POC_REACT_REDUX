@@ -15,7 +15,6 @@ import {Section} from './Section.react';
 
 class View extends Component {
     render() {
-      debugger;
         var {data, dispatch} = this.props;
 
         var renderTitle = () => {

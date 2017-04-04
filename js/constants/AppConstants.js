@@ -13,4 +13,5 @@ export const SET_ERROR_MESSAGE = 'SET_ERROR_MESSAGE';
 export const SET_METAMODEL_OBJECT = 'SET_METAMODEL_OBJECT';
 export const LOAD_PROPERTIES_FROM_RESOURCE = 'LOAD_PROPERTIES_FROM_RESOURCE';
 export const TRANSFORM_DATA_VIEW = 'TRANSFORM_DATA_VIEW';
+export const SET_NEW_VALUE = 'SET_NEW_VALUE';
 export const ENDPOINT_URL = 'http://integral-everest-724722050.ap-southeast-2.elb.amazonaws.com/DEV1-TEST/runtime-web/omni/service/';

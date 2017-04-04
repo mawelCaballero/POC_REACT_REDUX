@@ -2,7 +2,6 @@
     "metamodel": {
         "name": "Quote",
         "sections": [
-
             {
                 "title": "About the Client",
                 "class":"text-center",
@@ -15,7 +14,6 @@
                         "classInput":"mag-Top15px",
                         "class":"box box-rds-color box-marginTB everestFieldBox",
                         "patchOnBlur": true
-
                     },
                     {
                         "id": "quote-identifier",
@@ -33,7 +31,18 @@
                         "classInput":"mag-Top15px",
                         "class":"box box-rds-color box-marginTB everestFieldBox everestImageFieldBox occupation",
                         "patchOnBlur": true
+                    },
+                    {
+                        "id": "quote-document-status",
+                        "type": "text",
+                        "label": "_QUOTE_DOCUMENT_STATUS",
+                        "placeholder": "Enter document status",
+                        "classInput":"mag-Top15px",
+                        "class":"box box-rds-color box-marginTB everestFieldBox everestImageFieldBox occupation",
+                        "patchOnBlur": true
                     }
+
+
                 ]
             }
         ],
@@ -42,7 +51,6 @@
                 "quote:quote_owner_list",
                 "quote:insureds"
             ],
-
             "insured": [
                 "insured:coverages"
             ]

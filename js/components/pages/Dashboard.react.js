@@ -14,7 +14,6 @@ import  View  from '../View.react';
 class Dashboard extends Component {
 
   componentWillMount(){
-    debugger;
     const dispatch = this.props.dispatch;
     dispatch(loadRenderingData('dashboard','quotes'));
   }

@@ -16,7 +16,6 @@ export class TableResult extends Component {
             var container = [];
             var row = [];
             for (var currentColumn in cols) {
-                console.log('Rendering Rows ', currentColumn);
                 if (currentColumn == '6') {
                     row.push(
                         <td>

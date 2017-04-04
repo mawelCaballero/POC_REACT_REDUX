@@ -24,7 +24,7 @@
  */
 
 import bcrypt from 'bcryptjs';
-import { SET_AUTH, CHANGE_FORM, SENDING_REQUEST, SET_ERROR_MESSAGE, SET_METAMODEL_OBJECT, LOAD_PROPERTIES_FROM_RESOURCE, TRANSFORM_DATA_VIEW } from '../constants/AppConstants';
+import { SET_AUTH, CHANGE_FORM, SENDING_REQUEST, SET_ERROR_MESSAGE, SET_METAMODEL_OBJECT, LOAD_PROPERTIES_FROM_RESOURCE, TRANSFORM_DATA_VIEW, SET_NEW_VALUE } from '../constants/AppConstants';
 import * as errorMessages  from '../constants/MessageConstants';
 import auth from '../utils/auth';
 import genSalt from '../utils/salt';
@@ -104,6 +104,25 @@ export function logout() {
 }
 
 
+
+export function patchAction(actionData ){
+  debugger;
+  return (dispatch) => {
+    var criteria = {
+      param:{
+        key: actionData.id,
+        value: actionData.value
+      }
+    }
+    debugger;
+    resourceFactory.patch(actionData.url, criteria).then(function (res) {
+    dispatch(loadPropertiesFromResource(res));
+    dispatch(transformDataView());
+  });
+  }
+}
+
+
 export function searchAction( actionCriteria){
 
   return (dispatch) => {
@@ -137,7 +156,7 @@ export function loadRenderingData(metamodelName, resourceName, url){
     }else{
       resourceFactory.getResponse(resourceName, {}).then(function (res) {
         dispatch(loadPropertiesFromResource(res));
-        dispatch(transformDataView());
+        dispatch(transformDataView(url));
       });
     }
 
@@ -209,6 +228,10 @@ export function loadMetamodel(screenId) {
   return { type: SET_METAMODEL_OBJECT, screenId};
 }
 
+export function setNewValue(input) {
+  return { type: SET_NEW_VALUE, input};
+}
+
 /**
  * Sets the authentication state of the application
  * @param {boolean} newState True means a user is logged in, false means no user is logged in
@@ -217,8 +240,8 @@ export function loadPropertiesFromResource(response) {
   return { type: LOAD_PROPERTIES_FROM_RESOURCE, response };
 }
 
-export function transformDataView() {
-  return { type: TRANSFORM_DATA_VIEW };
+export function transformDataView(url) {
+  return { type: TRANSFORM_DATA_VIEW, url };
 }
 
 /**

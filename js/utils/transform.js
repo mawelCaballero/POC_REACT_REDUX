@@ -17,10 +17,8 @@ module.exports = function(metadata, response) {
                 var properties = [];
                 for (var j = 0; j < currentSection.properties.length; j++) {
                     var currentProperty = currentSection.properties[j];
-                    debugger;
 
                     switch (currentProperty.type) {
-
                         case 'text':
                             properties.push({
                                 id: currentProperty.id,
@@ -28,7 +26,8 @@ module.exports = function(metadata, response) {
                                 label: currentProperty.label,
                                 class: currentProperty.class,
                                 value: currentProperty.uiInput ? currentProperty.initValue : getPropertyValue(currentProperty.id, response),
-                                action: currentProperty.action ? currentProperty.action : null
+                                action: currentProperty.action ? currentProperty.action : null,
+                                href: response._links ? response._links.self.href : ''
                             });
 
                             break;
@@ -69,10 +68,19 @@ module.exports = function(metadata, response) {
 };
 
 var getPropertyValue = function(id, properties) {
-    debugger;
     for (var currentId in properties) {
         if (id === currentId) {
             return properties[id];
+        }
+    }
+    return null;
+}
+
+var getPropertyLink = function(id, properties) {
+    debugger;
+    for (var currentId in properties) {
+        if (id === currentId) {
+            return properties[id]._links.self.href;
         }
     }
     return null;

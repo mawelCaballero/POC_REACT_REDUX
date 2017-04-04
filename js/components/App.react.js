@@ -15,7 +15,6 @@ import auth from '../utils/auth';
 class App extends Component {
 
   render() {
-    debugger;
     console.log('App Component rendering');
     return(
       <div className="row">

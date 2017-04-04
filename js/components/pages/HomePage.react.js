@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 
 class HomePage extends Component {
 	render() {
-    debugger;
     const dispatch = this.props.dispatch;
     const { loggedIn } = this.props.data;
 

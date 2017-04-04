@@ -25,7 +25,7 @@ export class Section extends Component {
         return properties.map((property) => {
           switch (property.type) {
             case 'text':
-                return <Property key={property.id}  id={property.id} type={property.type} label={property.label} action={property.action}  value={property.value}/>
+                return <Property key={property.id}  id={property.id} type={property.type} label={property.label} action={property.action}  value={property.value} href={property.href}/>
             case 'table':
               return <TableResult key={property.id}  id={property.id} type={property.type} label={property.label} cols={property.cols} rows={property.rows}/>
             default:

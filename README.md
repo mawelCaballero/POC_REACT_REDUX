@@ -19,7 +19,7 @@ The default username is `kkdrensk` and the default password is `kkdrensk`, but f
 4. [Stats, facts and enhancements](#stats_and_facts)
 5. [Stats and Facts](#stats_and_facts)
 6. [POC Experience](#poc_experience)
-7. [Configuration Management] (#configuration_management)
+7. [Configuration Management](#configuration_management)
 
 -----
 ## Purpose of this document <a name="purpose-of-this-document"></a>
@@ -447,6 +447,13 @@ On the client side, a new Redux store will be created and initialized with the s
 Redux is only job on the server side is to provide the initial state of our app.
 
 [Source link ](http://redux.js.org/docs/recipes/ServerRendering.html)
+
+
+#### Next.js for server rendering
+
+**Next.js** is a minimalistic framework for server-rendered universal JavaScript webapps, built on top of React, Webpack and Babel.
+
+[Source Link](https://github.com/zeit/next.js#customizing-webpack-config)
 
 ### Abstraction
 
@@ -925,3 +932,25 @@ new WebpackDeployer({
 })
 ````
 Or we can customize our deployment in a different dynamic enviroment.
+
+
+### How to distribute Base FWK components in client insurance ui project
+
+
+React is commonly used in our front-end projects but webpack is not. This means we can’t just use babel to transpile our components and pack them with their local css. We need to use webpack to inline all of the local css, and bundle up our components into a js file that we can publish to npm.
+
+In our production webpack config we set the output options to build a library:
+
+````javascript
+output: {
+  path: path.join(__dirname, '/lib/'),
+  filename: 'index.js',
+  library: 'shared-components',
+  libraryTarget: 'umd'
+}
+
+externals: {
+  'react': 'react',
+  'react-dom': 'react-dom'
+}
+````
